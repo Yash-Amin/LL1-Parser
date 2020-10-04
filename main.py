@@ -172,10 +172,9 @@ def getFollow(rules, first):
         lhs, rhsParts = parse(rule)
         allNonTerminals.add(lhs)
 
-    merge = []
     for tmprule in rules:
         nonTerminal = parse(tmprule)[0]
-        # print('NT', nonTerminal)
+
         if nonTerminal == START:
             followSet[nonTerminal] = set('$')
             continue
@@ -186,24 +185,14 @@ def getFollow(rules, first):
             
             lhs, rhsParts = parse(rule)
 
-            # print('\t',rule)
-
             for part in rhsParts:
                 if nonTerminal not in part:
                     continue
                 index = part.index(nonTerminal) 
                 nextStr = part[index+1:]
-                # print('\tNext:', nextStr)
-                '''
-                    Example: nextTerminal = B, part = aBDh
-                        it will check for each char after B
-                            here D is nullable so h will 
-                            be included too.. 
-                        if anything is not nullable it will break
-                '''
+
                 if nextStr == '':
                     if lhs != nonTerminal:
-                        # print('\t Merged ', nonTerminal, lhs)
                         newSet = followSet[lhs] | followSet[nonTerminal]
                         followSet[lhs] = newSet
                         followSet[nonTerminal] = newSet
@@ -214,7 +203,6 @@ def getFollow(rules, first):
                         followSet[nonTerminal].add(c)
                         counter += 1
                         break
-                    # print('\t',c, first[c])
                     
                     for x in first[c]:
                         if x != '#':
@@ -228,7 +216,6 @@ def getFollow(rules, first):
                 if counter == 0:
                     for c in followSet[lhs]:
                         followSet[nonTerminal].add(c)
-                    # print(f'\t {lhs}------')
 
     return followSet
 
@@ -414,18 +401,13 @@ def main():
     rules = readRules()
 
     print()
-    # print(rules)
 
     first, follow = getFirstFollow(rules)
     
     t = getTable(first, follow, rules)
 
     print('\n[!] Parsing table:')
-    # for x in t:
-    #     print('\t', x,'::', dict(t[x]))
-
     printTable(t)
-
 
     s = input('\n> Enter string: ')
     s += '$'
