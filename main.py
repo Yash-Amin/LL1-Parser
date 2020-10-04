@@ -237,10 +237,10 @@ def getFirstFollow(rules):
     first = getFirst(rules)    
     follow = getFollow(rules, first)
 
-    print('\nFirst:')
+    print('\n[!] First:')
     printdd(first)
 
-    print('\nFollow:')
+    print('\n[!] Follow:')
     printdd(follow)
 
     return first, follow
